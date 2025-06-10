@@ -1,6 +1,6 @@
 # Token request (Post)
 
-**Endpoint**: <https://issuer.eudiw.dev/token> (or <https://localhost/token> if installed locally)
+**Endpoint**: <https://marmot-civil-gratefully.ngrok-free.app/token> (or <https://localhost/token> if installed locally)
 
 ## Token request with PKCE
 

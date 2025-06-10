@@ -308,7 +308,7 @@ def sdjwtFormatter(PID, country):
 
     claims = {
         "iss": cfgservice.service_url[:-1],
-        #"iss": "https://issuer.eudiw.dev",
+        #"iss": "https://marmot-civil-gratefully.ngrok-free.app",
         #"jti": jti,
         "iat": iat,
         # "nbf": iat,

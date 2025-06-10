@@ -8,7 +8,7 @@ There must be a credential request where it's response contains:
 
 Deferred Endpoint only works if the response contains a *transaction_id* which is then used to make the request.
 
-**Endpoint**: <https://issuer.eudiw.dev/deferred_credential> (or <https://localhost/deferred_credential> if installed locally)
+**Endpoint**: <https://marmot-civil-gratefully.ngrok-free.app/deferred_credential> (or <https://localhost/deferred_credential> if installed locally)
 
 
 **Example Request:**

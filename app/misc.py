@@ -137,10 +137,14 @@ def getAttributesForm(credentials_requested):
         attributes_req = {}
         if format == "mso_mdoc":
             namescapes = getNamespaces(credentialsSupported[request]["claims"])
+            combined_attributes = {}
             for namescape in namescapes:
-                attributes_req = getMandatoryAttributes(
-                    credentialsSupported[request]["claims"],namescape
+                attributes_from_namescape = getMandatoryAttributes(
+                    credentialsSupported[request]["claims"],
+                    namescape
                 )
+                combined_attributes.update(attributes_from_namescape)
+            attributes_req = combined_attributes
 
         elif format == "dc+sd-jwt":
             attributes_req.update(
@@ -437,10 +441,15 @@ def getAttributesForm2(credentials_requested):
 
         if format == "mso_mdoc":
             namescapes = getNamespaces(credentialsSupported[request]["claims"])
+            combined_attributes = {}
             for namescape in namescapes:
-                attributes_req = getOptionalAttributes(
-                    credentialsSupported[request]["claims"],namescape
+                attributes_from_namescape = getOptionalAttributes(
+                    credentialsSupported[request]["claims"],
+                    namescape
                 )
+                combined_attributes.update(attributes_from_namescape)
+
+            attributes_req = combined_attributes
 
         elif format == "dc+sd-jwt":
             attributes_req.update(

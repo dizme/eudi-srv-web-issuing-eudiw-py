@@ -1,6 +1,6 @@
 # Batch Credential Request (Post)
 
-**Endpoint**: <https://issuer.eudiw.dev/nonce> (or <https://localhost/nonce> if installed locally)
+**Endpoint**: <https://marmot-civil-gratefully.ngrok-free.app/nonce> (or <https://localhost/nonce> if installed locally)
 
 Request:  
 POST /nonce HTTP/1.1   

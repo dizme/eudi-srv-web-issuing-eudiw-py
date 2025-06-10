@@ -44,7 +44,7 @@ For configuring the installed [idpy-oidc](https://github.com/IdentityPython/idpy
 
 The EUDIW Issuer OAuth2 metadata configuration files are located in ```app/metadata_config/metadata_config.json``` and ```app/metadata_config/openid-configuration.json```
 
-You must change the base URL of the endpoints from ```https://issuer.eudiw.dev``` to a custom one or ``` https://localhost``` if installed locally
+You must change the base URL of the endpoints from ```https://marmot-civil-gratefully.ngrok-free.app``` to a custom one or ``` https://localhost``` if installed locally
 
 Example:
 ```json

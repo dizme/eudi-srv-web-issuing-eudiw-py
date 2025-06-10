@@ -1,10 +1,10 @@
 {
     "issuer":
-        "https://issuer.eudiw.dev",
+        "https://marmot-civil-gratefully.ngrok-free.app",
     "authorization_endpoint":
-        "https://issuer.eudiw.dev/authorizationV3",
+        "https://marmot-civil-gratefully.ngrok-free.app/authorizationV3",
     "token_endpoint":
-        "https://issuer.eudiw.dev/token",
+        "https://marmot-civil-gratefully.ngrok-free.app/token",
     "token_endpoint_auth_methods_supported": 
         ["public"],
     "token_endpoint_auth_signing_alg_values_supported":
@@ -12,11 +12,11 @@
     "code_challenge_methods_supported": 
         ["S256"],
     "userinfo_endpoint": 
-        "https://issuer.eudiw.dev/userinfo",
+        "https://marmot-civil-gratefully.ngrok-free.app/userinfo",
     "jwks_uri":
-        "https://issuer.eudiw.dev/static/jwks.json",
+        "https://marmot-civil-gratefully.ngrok-free.app/static/jwks.json",
     "registration_endpoint":
-        "https://issuer.eudiw.dev/registration",
+        "https://marmot-civil-gratefully.ngrok-free.app/registration",
     "scopes_supported": [
         "openid"],
     "response_types_supported":

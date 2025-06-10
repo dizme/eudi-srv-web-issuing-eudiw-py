@@ -1,6 +1,6 @@
 # Credential Request (Post)
 
-**Endpoint**: <https://issuer.eudiw.dev/credential> (or <https://localhost/credential> if installed locally)
+**Endpoint**: <https://marmot-civil-gratefully.ngrok-free.app/credential> (or <https://localhost/credential> if installed locally)
 
 
 Header:
