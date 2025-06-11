@@ -82,7 +82,28 @@ def mdocFormatter(data, credential_metadata, country, device_publickey):
         "issuance_date": issuance_date.strftime('%Y-%m-%d'),
         "expiry_date": expiry_date.strftime('%Y-%m-%d')
     }
-    
+    # if data contains the namespace for mdoc italian mDL, then add verification as attribute
+    if data["org.iso.18013.5.1.IT"]:
+        data["org.iso.18013.5.1.IT"]["verification"] = {
+            "trust_framework": "self-asserted italian mDL",
+            "assurance_level": "low",
+            "evidence": [
+                {
+                    "type": "id_evidence",
+                    "time": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds") + "Z",
+                    "attestation": {
+                        "type": "id_attestation",
+                        "reference_number": "REF123456",
+                        "date_of_issuance": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds") + "Z",
+                        "voucher": {
+                            "organization": "Motorizzazione Civile"
+                        }
+                    }
+                }
+            ]
+        }
+
+
     """ if doctype == "org.iso.18013.5.1.mDL":
 
         # data["org.iso.18013.5.1"]["signature_usual_mark"] = base64.urlsafe_b64decode(

@@ -462,7 +462,7 @@
 				],
 				"mandatory": false,
 				"value_type": "object",
-				"source": "user",
+				"source": "issuer",
 				"display": [
 					{
 						"name": "Verification Information",
