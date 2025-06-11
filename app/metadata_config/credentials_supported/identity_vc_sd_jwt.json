@@ -1,7 +1,7 @@
 {
 	"it.infocert.eudi.identity_vc_sd_jwt": {
-		"format": "vc+sd-jwt",
-		"scope": "it.infocert.eudi.identity.1",
+		"format": "dc+sd-jwt",
+		"scope": "it.infocert.eudi.identity_vc_sd_jwt",
 		"cryptographic_binding_methods_supported": [
 			"jwk", "cose_key"
 		],
@@ -35,8 +35,10 @@
 			}
 		}],
 		"vct": "urn:it.infocert.eudi:identity:1",
-		"claims": {
-			"given_name": {
+		"claims": [{
+				"path": [
+					"given_name"
+				],
 				"mandatory": true,
 				"value_type": "string",
 				"source": "user",
@@ -45,7 +47,10 @@
 					"locale": "en"
 				}]
 			},
-			"family_name": {
+			{
+				"path": [
+					"family_name"
+				],
 				"mandatory": true,
 				"value_type": "string",
 				"source": "user",
@@ -54,7 +59,10 @@
 					"locale": "en"
 				}]
 			},
-			"birth_date": {
+			{
+				"path": [
+					"birth_name"
+				],
 				"mandatory": false,
 				"value_type": "full-date",
 				"source": "user",
@@ -63,7 +71,10 @@
 					"locale": "en"
 				}]
 			},
-			"tax_id_code": {
+			{
+				"path": [
+					"tax_id_code"
+				],
 				"mandatory": true,
 				"value_type": "string",
 				"source": "user",
@@ -72,7 +83,10 @@
 					"locale": "en"
 				}]
 			},
-			"email": {
+			{
+				"path": [
+					"email"
+				],
 				"mandatory": false,
 				"value_type": "string",
 				"source": "user",
@@ -81,7 +95,10 @@
 					"locale": "en"
 				}]
 			},
-			"phone_number": {
+			{
+				"path": [
+					"phone_number"
+				],
 				"mandatory": false,
 				"value_type": "string",
 				"source": "user",
@@ -90,7 +107,10 @@
 					"locale": "en"
 				}]
 			},
-			"issuance_date": {
+			{
+				"path": [
+					"issuance_date"
+				],
 				"mandatory": true,
 				"source": "issuer",
 				"display": [{
@@ -98,7 +118,10 @@
 					"locale": "en"
 				}]
 			},
-			"expiry_date": {
+			{
+				"path": [
+					"expiry_date"
+				],
 				"mandatory": true,
 				"source": "issuer",
 				"display": [{
@@ -106,7 +129,10 @@
 					"locale": "en"
 				}]
 			},
-			"issuing_country": {
+			{
+				"path": [
+					"issuing_country"
+				],
 				"mandatory": true,
 				"source": "issuer",
 				"display": [{
@@ -114,7 +140,10 @@
 					"locale": "en"
 				}]
 			},
-			"issuing_authority": {
+			{
+				"path": [
+					"issuing_authority"
+				],
 				"mandatory": true,
 				"source": "issuer",
 				"display": [{
@@ -122,6 +151,13 @@
 					"locale": "en"
 				}]
 			}
+		],
+		"issuer_config": {
+			"issuing_authority": "Infocert Identity issuer",
+			"organization_id": "Infocert",
+			"validity": 90,
+			"organization_name": "Infocert Identity issuer",
+			"doctype": "it.infocert.eudi.identity.1"
 		}
 	}
 }
