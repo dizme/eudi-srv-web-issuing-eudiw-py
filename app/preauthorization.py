@@ -25,21 +25,28 @@ import base64
 import io
 import json
 import random
+
+import jwt
 from PIL import Image
-from flask import Blueprint, current_app, make_response, redirect, render_template, request, session
+from flask import Blueprint, current_app, make_response, redirect, render_template, request, session, jsonify
 from flask_cors import CORS
 import requests
 import urllib.parse
 from datetime import date, datetime, timedelta
+
+from jwt import ExpiredSignatureError, InvalidTokenError
+
 from redirect_func import url_get
 
 import segno
 
 from app.route_oidc import service_endpoint
+from .app_config.config_secrets import hmac_secret
 from .app_config.config_service import ConfService as cfgservice
 from app.misc import authentication_error_redirect, calculate_age, generate_unique_id, getAttributesForm, getAttributesForm2, validate_image
 
-from app.data_management import parRequests, transaction_codes, getSessionId_requestUri, session_ids
+from app.data_management import parRequests, transaction_codes, getSessionId_requestUri, session_ids, \
+    transactions_statuses
 from app.data_management import form_dynamic_data
 from . import oidc_metadata
 
@@ -398,8 +405,91 @@ def credentialOfferReq2():
     return credential_offer #{"credential_offer": credential_offer,"uri": uri}
 
 
+@preauth.route("/generateCredentialOffer", methods=["POST"])
+def generateCredentialOffer():
+    try:
+        json_token = request.form.get('request')
+        if not json_token:
+            return jsonify({"error": "Missing JWT request"}), 400
 
+        # Validate JWT Signature using HMAC (HS256)
+        try:
+            if hmac_secret:  # Only validate if `hmac_secret` is set
+                decoded_payload = jwt.decode(json_token, hmac_secret, algorithms=["HS256"])
+            else:
+                header, payload, signature = json_token.split('.')
+                payload += '=' * (-len(payload) % 4)  # Fix padding
+                decoded_payload = json.loads(base64.urlsafe_b64decode(payload).decode('utf-8'))
+        except ExpiredSignatureError:
+            return jsonify({"error": "JWT has expired"}), 401
+        except InvalidTokenError:
+            return jsonify({"error": "Invalid JWT"}), 400
+        transaction_id = request.form.get("transaction_id", generate_unique_id())
+        tx_code= request.form.get("tx_code", random.randint(10000, 99999))
 
+        return preauthorized_offer(decoded_payload,transaction_id=transaction_id, tx_code=tx_code)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+def preauthorized_offer(payload, transaction_id=None, tx_code=None):
+    # Extract data from JWT payload
+    authorization_details = []
+    credential_ids = []
+    for credential in payload["credentials"]:
+        authorization_details.append({
+            "type": "openid_credential",
+            "credential_configuration_id": credential["credential_configuration_id"]
+        })
+        if credential["credential_configuration_id"] not in credential_ids:
+            credential_ids.append(credential["credential_configuration_id"])
+    data = payload["credentials"][0]["data"]
+    pre_auth_code = generate_preauth_token(data=data, authorization_details=authorization_details)
+    tx_code = random.randint(10000, 99999) if not tx_code else tx_code
+    transaction_codes[transaction_id] = {
+        "pre_auth_code": pre_auth_code,
+        "tx_code": str(tx_code),
+        "expires": datetime.now() + timedelta(minutes=cfgservice.tx_code_expiry)
+    }
+    session_id = next((sid for sid, data in session_ids.items() if data.get("auth_code") == pre_auth_code), None)
+    transactions_statuses.update(
+        {
+            transaction_id: {
+                "internal_session_id": session_id,
+                "status": "started",
+                "reason": "credential offer generated"
+            }
+        }
+    )
+    credential_offer = {
+        "credential_issuer": cfgservice.service_url.rstrip('/'),
+        "credential_configuration_ids": credential_ids,
+        "grants": {
+            "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+                "pre-authorized_code": transaction_id,
+                "tx_code": {
+                    "length": 5,
+                    "input_mode": "numeric",
+                    "description": "Please provide the one-time code.",
+                    "value": tx_code
+                }
+            }
+        }
+    }
+    json_string = json.dumps(credential_offer)
+    uri = f"openid-credential-offer://credential_offer?credential_offer=" + urllib.parse.quote(json_string, safe=":/")
+    # Generate QR Code
+    qrcode = segno.make(uri)
+    out = io.BytesIO()
+    qrcode.save(out, kind='png', scale=3)
+    qr_img_base64 = "data:image/png;base64," + base64.b64encode(out.getvalue()).decode("utf-8")
+    return jsonify({
+        "credential_offer": credential_offer,
+        "uri": uri,
+        "qr_code": qr_img_base64,
+        "tx_code": tx_code,
+        "transaction_id": transaction_id
+    })
 
 def generate_preauth_token(data, authorization_details):
     user_id = generate_unique_id()

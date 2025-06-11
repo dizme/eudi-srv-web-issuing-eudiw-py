@@ -23,6 +23,7 @@ This manages necessary data and it's removal
 import json
 import threading
 from datetime import datetime
+from typing import Optional
 
 from .app_config.config_service import ConfService as cfgservice
 import requests
@@ -35,6 +36,7 @@ oid4vp_requests = {}
 form_dynamic_data = {}
 session_ids = {}
 credential_offer_references = {}
+transactions_statuses = {}
 
 def getSessionId_requestUri(target_request_uri):
     matching_session_id = None
@@ -63,6 +65,23 @@ def getSessionId_accessToken(target_accessToken):
             break
     
     return matching_session_id
+
+def get_transaction_id_by_session_id(session_id: str) -> Optional[str]:
+    for tx_id, data in transactions_statuses.items():
+        if data.get("internal_session_id") == session_id:
+            return tx_id
+    return None
+
+def update_transaction_status(session_id: str, status: str, reason: Optional[str] = None):
+    transaction_id = get_transaction_id_by_session_id(session_id)
+    if transaction_id:
+        transactions_statuses[transaction_id]["status"] = status.lower()
+        if reason:
+            transactions_statuses[transaction_id]["reason"] = reason.lower()
+        cfgservice.app_logger.info(f"Updated transaction status for session ID {session_id} to {status}")
+    else:
+        cfgservice.app_logger.error(f"Session ID {session_id} not found in transactions statuses")
+
 
 ################################################
 ## To be moved to a file with scheduled jobs
