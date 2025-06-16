@@ -16,7 +16,10 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /tmp/log_dev
 RUN chmod -R 755 /tmp/log_dev
 
-RUN git clone https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py.git /root/eudi-srv-web-issuing-eudiw-py
+# RUN git clone https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py.git /root/eudi-srv-web-issuing-eudiw-py
+COPY . /root/eudi-srv-web-issuing-eudiw-py
+
+COPY ./secrets /root/secrets
 
 WORKDIR /root/eudi-srv-web-issuing-eudiw-py
 
@@ -33,4 +36,5 @@ ENV FLASK_APP=app\
     EIDAS_NODE_URL="https://preprod.issuer.eudiw.dev/EidasNode/"\
     DYNAMIC_PRESENTATION_URL="https://dev.verifier-backend.eudiw.dev/ui/presentations/"
 
-CMD ["sh", "-c", "cp /root/secrets/config_secrets.py /root/eudi-srv-web-issuing-eudiw-py/app/app_config/ && export REQUESTS_CA_BUNDLE=/root/secrets/cert.pem && /root/eudi-srv-web-issuing-eudiw-py/venv/bin/flask run --cert=/root/secrets/cert.pem --key=/root/secrets/key.pem"]
+#CMD ["sh", "-c", "cp /root/secrets/config_secrets.py /root/eudi-srv-web-issuing-eudiw-py/app/app_config/ && export REQUESTS_CA_BUNDLE=/root/secrets/cert.pem && /root/eudi-srv-web-issuing-eudiw-py/venv/bin/flask run --cert=/root/secrets/cert.pem --key=/root/secrets/key.pem"]
+CMD ["sh", "-c", "cp /root/secrets/config_secrets.py /root/eudi-srv-web-issuing-eudiw-py/app/app_config/ && /root/eudi-srv-web-issuing-eudiw-py/venv/bin/flask run"]
