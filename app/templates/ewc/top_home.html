@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="Title" content="EUDI Wallet Identification" />
+    <meta name="Keywords" content="EUDI Wallet, Identification, OpenID" />
+    <meta name="Description" content="Start identification for EUDI Wallet" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta name="referrer" content="no-referrer">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TOP Identification - EUDI Wallet</title>
+</head>
+
+<body class="text-gray-900 flex flex-col min-h-screen">
+
+    <div class="container mx-auto p-6 flex-grow">
+        {% include 'ewc/header.html' %}
+
+        <main class="bg-white shadow-md rounded-lg p-6 w-full max-w-2xl mx-auto flex flex-col justify-center items-center text-center flex-grow">
+            <h1 class="text-2xl font-semibold">EUDI Wallet Identity Credential Portal</h1>
+
+            <div id="genericErrorsDesc" class="text-red-500 text-center mt-4"></div>
+
+            <div class="mt-4 text-lg text-gray-700">
+                <p>Start the <b>identification process</b> to retrieve dossier information from <b>TOP</b> and issue credentials.</p>
+                <p class="mt-2">Click the button below to <b>proceed with identification</b>:</p>
+            </div>
+
+            <button id="startIdentificationBtn"
+                class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Start Identification
+            </button>
+
+            <div id="identificationStartedLabel" class="text-green-600 text-sm mt-2 hidden">
+                Identification already started
+            </div>
+
+            <div id="issuanceSection" class="mt-10 hidden">
+                <div class="text-lg text-gray-700">
+                    <p>Start the <b>issuance process</b> for dossier <span id="dossierIdLabel" class="font-mono text-blue-600"></span>.</p>
+                    <p class="mt-2">Click the button below to get a credential offer for <b>Identity Credential</b>:</p>
+                </div>
+
+                <a id="startIssuanceBtn" href="#"
+                    class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Start Issuance
+                </a>
+            </div>
+
+            <!-- Manual dossier ID input -->
+            <div class="mt-10 w-full border-t border-gray-300 pt-6">
+                <h2 class="text-lg font-semibold mb-2">Manual Issuance with Existing Dossier ID</h2>
+                <form id="manualIssuanceForm" class="flex flex-col items-center">
+                    <input type="text" id="manualDossierId" name="dossierId" placeholder="Enter dossier ID"
+                        class="w-full max-w-md p-2 border border-gray-300 rounded-md mb-4 text-sm text-gray-800" required>
+                    <button type="submit"
+                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Start Manual Issuance
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    {% include 'misc/footer.html' %}
+
+    <script>
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        document.getElementById("startIdentificationBtn").addEventListener("click", function () {
+            const dossierId = uuidv4();
+            const identificationUrl = "{{ identification_url }}?dossierId=" + dossierId;
+            const issuanceUrl = "{{ issuance_url }}?dossierId=" + dossierId + "&format=mdoc";
+
+            window.open(identificationUrl, '_blank');
+
+            this.disabled = true;
+            this.classList.add("opacity-50", "cursor-not-allowed");
+
+            document.getElementById("identificationStartedLabel").classList.remove("hidden");
+
+            const issuanceBtn = document.getElementById("startIssuanceBtn");
+            issuanceBtn.href = issuanceUrl;
+
+            const dossierIdLabel = document.getElementById("dossierIdLabel");
+            dossierIdLabel.textContent = dossierId;
+
+            document.getElementById("issuanceSection").classList.remove("hidden");
+        });
+
+        document.getElementById("manualIssuanceForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const manualId = document.getElementById("manualDossierId").value.trim();
+            if (manualId !== "") {
+                window.location.href = "{{ issuance_url }}?dossierId=" + manualId + "&format=mdoc";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="Title" content="EUDI Wallet Credential Offer" />
+    <meta name="Keywords" content="EUDI Wallet, Credential Offer, OpenID4VCI" />
+    <meta name="Description" content="Display Credential Offer details for EUDI Wallet" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta name="referrer" content="no-referrer">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Credential Offer - EUDI Wallet</title>
+</head>
+
+<body class="text-gray-900 flex flex-col min-h-screen">
+
+    <div class="container mx-auto p-6 flex-grow">
+        {% include 'ewc/header.html' %}
+
+        <main class="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl mx-auto flex flex-col items-center text-center">
+            <h1 class="text-2xl font-semibold mb-4">Identity Credential Offer</h1>
+
+            <div class="text-left w-full">
+                <p><strong>Issuer:</strong> {{ credential_offer["credential_issuer"] }}</p>
+                <p><strong>Credential Configuration:</strong> {{ credential_offer["credential_configuration_ids"][0] }}</p>
+                <p><strong>Transaction ID:</strong> {{ transaction_id }}</p>
+                <p><strong>Pre-Authorized Code:</strong> {{ credential_offer["grants"]["urn:ietf:params:oauth:grant-type:pre-authorized_code"]["pre-authorized_code"] }}</p>
+            </div>
+
+            <div class="mt-6 flex flex-col items-center">
+                <img src="{{ qr_code }}" alt="QR Code" class="w-48 h-48">
+                <p class="m-2 text-xl"><strong>TX Code:</strong> {{ tx_code }}</p>
+                <a href="{{ uri }}" class="mt-4 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    Open in Wallet
+                </a>
+            </div>
+
+            <button id="checkStatusBtn"
+                class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Check Issuance Status
+            </button>
+
+            <div id="issuanceStatus" class="mt-4 text-lg text-gray-700 hidden">
+                Issuance Status: <span id="statusValue" class="font-semibold text-blue-700"></span>
+            </div>
+        </main>
+    </div>
+
+    {% include 'misc/footer.html' %}
+
+    <script>
+      let pollingInterval = null;
+
+      async function fetchStatus() {
+          try {
+              const res = await fetch("{{ status_url }}");
+              const data = await res.json();
+              const status = data.status || "unknown";
+
+              document.getElementById("statusValue").textContent = status;
+              document.getElementById("issuanceStatus").classList.remove("hidden");
+
+              if (["completed", "fail"].includes(status.toLowerCase())) {
+                  clearInterval(pollingInterval);
+              }
+          } catch (err) {
+              document.getElementById("statusValue").textContent = "ERROR";
+              document.getElementById("issuanceStatus").classList.remove("hidden");
+              clearInterval(pollingInterval);
+          }
+      }
+
+      document.getElementById("checkStatusBtn").addEventListener("click", () => {
+          fetchStatus(); // initial call
+          pollingInterval = setInterval(fetchStatus, 3000); // poll every 3 seconds
+      });
+    </script>
+</body>
+
+</html>

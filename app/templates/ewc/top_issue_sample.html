@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="Title" content="EUDI Wallet Credential Offer" />
+    <meta name="Keywords" content="EUDI Wallet, Credential Offer, OpenID4VCI" />
+    <meta name="Description" content="Display Credential Offer details for EUDI Wallet" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta name="referrer" content="no-referrer">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Credential Offer - EUDI Wallet</title>
+</head>
+
+<body class="text-gray-900 flex flex-col min-h-screen">
+
+    <div class="container mx-auto p-6 flex-grow">
+        {% include 'ewc/header.html' %}
+
+        <main class="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl mx-auto flex flex-col items-center text-center">
+            <h1 class="text-2xl font-semibold mb-4">Identity Credential Offer</h1>
+
+            <div class="text-left w-full">
+                <p><strong>Issuer:</strong> {{ credential_offer["credential_issuer"] }}</p>
+                <p><strong>Credential Configuration:</strong> {{ credential_offer["credential_configuration_ids"][0] }}</p>
+                <p><strong>Transaction ID:</strong> {{ transaction_id }}</p>
+                <p><strong>Pre-Authorized Code:</strong> {{ credential_offer["grants"]["urn:ietf:params:oauth:grant-type:pre-authorized_code"]["pre-authorized_code"] }}</p>
+            </div>
+
+            <div class="mt-6 w-full">
+                <label for="dossierInfo" class="block text-left font-semibold text-gray-700 mb-1">The credential will contains attributes from this dossier person</label>
+                <textarea id="dossierInfo" readonly rows="10"
+                    class="w-full border border-gray-300 rounded-md p-2 text-sm font-mono bg-gray-50">
+{{ dossier_info | tojson(indent=2) }}
+                </textarea>
+            </div>
+
+            <div class="mt-6 flex flex-col items-center">
+                <img src="{{ qr_code }}" alt="QR Code" class="w-48 h-48">
+                <p class="m-2 text-xl"><strong>TX Code:</strong> {{ tx_code }}</p>
+                <a href="{{ uri }}" class="mt-4 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    Open in Wallet
+                </a>
+            </div>
+        </main>
+    </div>
+
+    {% include 'misc/footer.html' %}
+</body>
+
+</html>

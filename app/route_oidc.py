@@ -87,7 +87,7 @@ from app.data_management import (
     session_ids,
     getSessionId_requestUri,
     getSessionId_authCode,
-    credential_offer_references
+    credential_offer_references, update_transaction_status
 )
 
 
@@ -744,6 +744,12 @@ def token():
             + str(response.json())
         )
 
+        update_transaction_status(
+            session_id=session_id,
+            status="in_progress",
+            reason="Issuance in progress",
+        )
+
         response_json = response.json()
 
         if "access_token" in response_json:
@@ -873,6 +879,13 @@ def credential():
             + "Credential response, Payload: "
             + response_str
         )
+
+        update_transaction_status(
+            session_id=session_id,
+            status="completed",
+            reason="Credential issued successfully",
+        )
+
         return _response
 
     """ if (
@@ -1019,6 +1032,12 @@ def deferred_credential():
         + ", "
         + "Deferred response, Payload: "
         + str(_resp)
+    )
+
+    update_transaction_status(
+        session_id=session_id,
+        status="completed",
+        reason="Credential issued successfully",
     )
 
     return _resp
