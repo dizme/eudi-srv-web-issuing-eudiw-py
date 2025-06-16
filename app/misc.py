@@ -30,6 +30,8 @@ from io import BytesIO
 import secrets
 from urllib import request
 from PIL import Image
+from cryptography.hazmat.primitives import serialization
+
 from app import oidc_metadata
 from flask import jsonify, current_app, redirect
 from flask.helpers import make_response
@@ -713,3 +715,39 @@ def auth_error_redirect(return_uri, error, error_description=None):
         url_get(return_uri, error_msg),
         code=302,
     )
+
+
+def b64pem_to_cose_and_jwk_base64(b64pem_str: str) -> tuple[dict, str]:
+    # Decode the base64 PEM string
+    device_key_bytes = base64.urlsafe_b64decode(b64pem_str.encode("utf-8"))
+
+    # Load PEM public key
+    public_key = serialization.load_pem_public_key(device_key_bytes)
+    numbers = public_key.public_numbers()
+
+    # Get coordinates
+    x_bytes = numbers.x.to_bytes(32, byteorder="big")
+    y_bytes = numbers.y.to_bytes(32, byteorder="big")
+
+    # COSE_Key (EC2, ES256, P-256)
+    cose_key = {
+        1: 2,    # kty: EC2
+        3: -7,   # alg: ES256
+        -1: 1,   # crv: P-256
+        -2: x_bytes,
+        -3: y_bytes,
+    }
+
+    # JWK dict
+    jwk = {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": base64.urlsafe_b64encode(x_bytes).decode().rstrip("="),
+        "y": base64.urlsafe_b64encode(y_bytes).decode().rstrip("="),
+    }
+
+    # Base64 (not URL-safe) encode of the JWK JSON
+    jwk_json = json.dumps(jwk, separators=(',', ':'))
+    jwk_b64 = base64.b64encode(jwk_json.encode()).decode()
+
+    return cose_key, jwk_b64
