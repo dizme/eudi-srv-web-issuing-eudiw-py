@@ -1,9 +1,9 @@
 {
-  "credential_issuer": "https://marmot-civil-gratefully.ngrok-free.app",
-  "credential_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/credential",
-  "notification_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/notification",
-  "deferred_credential_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/deferred_credential",
-  "nonce_endpoint":"https://marmot-civil-gratefully.ngrok-free.app/nonce",
+  "credential_issuer": "{{SERVICE_URL}}",
+  "credential_endpoint": "{{SERVICE_URL}}/credential",
+  "notification_endpoint": "{{SERVICE_URL}}/notification",
+  "deferred_credential_endpoint": "{{SERVICE_URL}}/deferred_credential",
+  "nonce_endpoint":"{{SERVICE_URL}}/nonce",
   "batch_credential_issuance": {
       "batch_size": 15
     },
@@ -29,7 +29,7 @@
     "name": "Digital Credentials Issuer",
     "locale": "en",
     "logo": {
-        "uri": "https://marmot-civil-gratefully.ngrok-free.app/ic-logo.png",
+        "uri": "{{SERVICE_URL}}/ic-logo.png",
         "alt_text": "EU Digital Identity Wallet Logo"
     }
     }

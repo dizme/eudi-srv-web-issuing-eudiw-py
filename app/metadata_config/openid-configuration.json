@@ -13,7 +13,7 @@
         "urn:ietf:params:oauth:grant-type:jwt-bearer",
         "refresh_token"
     ],
-    "jwks_uri": "https://marmot-civil-gratefully.ngrok-free.app/static/jwks.json",
+    "jwks_uri": "{{SERVICE_URL}}/static/jwks.json",
     "scopes_supported": [
         "openid"
     ],
@@ -78,13 +78,13 @@
     "code_challenge_methods_supported": [
         "S256"
     ],
-    "issuer": "https://marmot-civil-gratefully.ngrok-free.app",
-    "registration_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/registration",
-    "introspection_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/introspection",
-    "authorization_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/authorizationV3",
-    "token_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/token",
-    "userinfo_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/userinfo",
-    "end_session_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/session",
-    "pushed_authorization_request_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/pushed_authorizationv2",
-    "credential_endpoint": "https://marmot-civil-gratefully.ngrok-free.app/credential"
+    "issuer": "{{SERVICE_URL}}",
+    "registration_endpoint": "{{SERVICE_URL}}/registration",
+    "introspection_endpoint": "{{SERVICE_URL}}/introspection",
+    "authorization_endpoint": "{{SERVICE_URL}}/authorizationV3",
+    "token_endpoint": "{{SERVICE_URL}}/token",
+    "userinfo_endpoint": "{{SERVICE_URL}}/userinfo",
+    "end_session_endpoint": "{{SERVICE_URL}}/session",
+    "pushed_authorization_request_endpoint": "{{SERVICE_URL}}/pushed_authorizationv2",
+    "credential_endpoint": "{{SERVICE_URL}}/credential"
 }
