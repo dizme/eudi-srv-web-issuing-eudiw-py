@@ -17,10 +17,16 @@
 ###############################################################################
 import datetime
 import json
+import uuid
+
 from flask import session
+
+from app.redirect_func import json_data_post_with_header
 from app_config.config_service import ConfService as cfgserv
 from app_config.config_countries import ConfCountries as cfgcountries
-from misc import calculate_age, doctype2credential, doctype2credentialSDJWT, getIssuerFilledAttributes, getIssuerFilledAttributesSDJWT, getMandatoryAttributes, getMandatoryAttributesSDJWT, getNamespaces, getOptionalAttributes, getOptionalAttributesSDJWT
+from misc import calculate_age, doctype2credential, doctype2credentialSDJWT, getIssuerFilledAttributes, \
+    getIssuerFilledAttributesSDJWT, getMandatoryAttributes, getMandatoryAttributesSDJWT, getNamespaces, \
+    getOptionalAttributes, getOptionalAttributesSDJWT, b64pem_to_cose_and_jwk_base64
 from redirect_func import json_post
 import base64
 from flask import session
@@ -40,29 +46,49 @@ def dynamic_formatter(format, doctype, form_data, device_publickey):
         un_distinguishing_sign = ""
 
     data, requested_credential = formatter(dict(form_data), un_distinguishing_sign, doctype, format)
-    
+    print(data)
+
+    # TODO At the moment data's org.iso.18013.5.1 elements must be enclosed in "credential" object
+    if "org.iso.18013.5.1" in data:
+        credential_ns = data["org.iso.18013.5.1"]
+        data["org.iso.18013.5.1"] = {"credential": credential_ns}
+    print(data)
+
     if format == "mso_mdoc":
-        url = cfgserv.service_url + "formatter/cbor"
+        url = cfgserv.cbor_service_url
 
     elif format == "dc+sd-jwt":
         url = cfgserv.service_url + "formatter/sd-jwt"
 
-    r = json_post(
-        url,
-        {
-            "version": session["version"],
-            "country": session["country"],
-            "credential_metadata": requested_credential,
-            "device_publickey": device_publickey,
-            "data": data,
-        },
-    ).json()
+    # r = json_post(
+    #     url,
+    #     {
+    #         "version": session["version"],
+    #         "country": session["country"],
+    #         "credential_metadata": requested_credential,
+    #         "device_publickey": device_publickey,
+    #         "data": data,
+    #     },
+    # ).json()
 
-    if not r["error_code"] == 0:
-        return "Error"
+    cose_key, device_public_key_b64jwk = b64pem_to_cose_and_jwk_base64(device_publickey)
 
+    # Calling Cbor Service
+    r = json_data_post_with_header(
+        url=url,
+        payload=data,
+        headers = {
+            "X-Request-ID": str(uuid.uuid4()),
+            "X-Device-JWK": device_public_key_b64jwk,
+            "Content-Type": "application/json"
+        }
+    )
+
+    r.raise_for_status()
+    base64_mdoc = r.json().get("credential")
+    print(base64_mdoc)
     if format == "mso_mdoc":
-        mdoc = bytes(r["mdoc"], "utf-8")
+        mdoc = bytes(base64_mdoc, "utf-8")
         credential = mdoc.decode("utf-8")
     elif format == "dc+sd-jwt":
         credential = r["sd-jwt"]
@@ -116,11 +142,22 @@ def formatter(data, un_distinguishing_sign, doctype, format):
         attributes_req2 = getOptionalAttributesSDJWT(requested_credential["claims"])
         issuer_claims = getIssuerFilledAttributesSDJWT(requested_credential["claims"])
 
-    if "age_over_18" in issuer_claims and "birth_date" in data:
-        data["age_over_18"] = calculate_age(data["birth_date"]) >= 18
+    else:
+        raise ValueError("Unsupported format: {}".format(format))
+
+    age_thresholds = [13, 16, 18, 21, 25, 60, 62, 65, 68]
+    for threshold in age_thresholds:
+        key = f"age_over_{threshold}"
+        if key in issuer_claims and "birth_date" in data:
+            data[key] = calculate_age(data["birth_date"]) >= threshold
 
     if "age_over_18" in data:
         attributes_req2["age_over_18"] = data["age_over_18"]
+
+    # if "portrait" in data:
+    #     data["portrait"] = base64.urlsafe_b64decode(
+    #         data["portrait"]
+    #     )
 
     if "un_distinguishing_sign" in issuer_claims:
         data["un_distinguishing_sign"] = un_distinguishing_sign
@@ -140,9 +177,30 @@ def formatter(data, un_distinguishing_sign, doctype, format):
     if "issuing_authority_unicode" in issuer_claims:
         data["issuing_authority_unicode"] = doctype_config["issuing_authority"]
 
+    if "issuing_jurisdiction" in issuer_claims:
+        data["issuing_jurisdiction"] = doctype_config.get("issuing_jurisdiction", "EU")
+
     if "credential_type" in issuer_claims:
         data["credential_type"] = doctype_config["credential_type"]
         attributes_req["credential_type"] = ""
+
+    if "verification" in issuer_claims:
+        data["verification"] = {
+            "trust_framework": "it_wallet",
+            "assurance_level": "substantial",
+            "evidence": [{
+                "type": "vouch",
+                "time": int(datetime.datetime.now().timestamp()),
+                "attestation": {
+                    "type": "digital_attestation",
+                    "reference_number": "REF-2025-0001",
+                    "date_of_issuance": today.strftime("%Y-%m-%d"),
+                    "voucher": {
+                        "organization": doctype_config["organization_name"]
+                    }
+                }
+            }]
+        }
 
     for k in ["at_least_one_of"]:
         attributes_req.pop(k, None)

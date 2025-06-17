@@ -22,6 +22,8 @@ Its main goal is to issue the PID and MDL in cbor/mdoc (ISO 18013-5 mdoc) and SD
 
 This redirect_func.py file manages the redirection of the flow.
 """
+import json
+
 import requests
 import urllib.parse
 from flask import redirect, session
@@ -77,4 +79,18 @@ def json_post(url_path: str, json: dict):
     """
     return requests.post(
         url_path, json=json, headers={"Content-Type": "application/json"}
+    )
+
+def json_data_post_with_header(url: str, payload: dict, headers: dict):
+    """Executes the HTTP POST to url_path with json payload and custom headers
+
+    Keyword arguments:
+    + url_path -- URL to POST
+    + json -- json payload dictionary (key: value)
+    + headers -- custom headers dictionary (key: value)
+
+    Return: Returns the answer to the HTTP POST
+    """
+    return requests.post(
+        url, data=json.dumps(payload), headers=headers, verify=False
     )

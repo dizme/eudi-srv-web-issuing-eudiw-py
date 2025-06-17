@@ -37,6 +37,7 @@ class ConfService:
     service_url = os.getenv("SERVICE_URL", "https://marmot-civil-gratefully.ngrok-free.app/")
     # service_url = "https://127.0.0.1:5000/"
     # service_url = os.getenv("SERVICE_URL","https://dev.issuer.eudiw.dev/")
+    cbor_service_url = os.getenv("CBOR_SERVICE_URL", "https://127.0.0.1:443/v1/signed-mdoc-credentials/mdl")
 
     wallet_test_url = "https://tester.issuer.eudiw.dev/"
 
@@ -113,7 +114,7 @@ class ConfService:
     mdl_issuing_authority = "Test MDL issuer"
 
     # Italian mDL namespace
-    mdl_it_namespace = "eu.europa.ec.eudi.mdl_it_mdoc"
+    mdl_it_namespace = "it.infocert.ipzs.mdl_mdoc"
 
     # Italian mDL doctype
     mdl_it_doctype = "org.iso.18013.5.1.mDL"
@@ -406,7 +407,7 @@ class ConfService:
         "country_selection": [
             "eu.europa.ec.eudi.loyalty_mdoc",
             "eu.europa.ec.eudi.mdl_mdoc",
-            "eu.europa.ec.eudi.mdl_it_mdoc",
+            "it.infocert.ipzs.mdl_mdoc",
             "eu.europa.ec.eudi.pid_vc_sd_jwt",
             "eu.europa.ec.eudi.pid_mdoc",
             "eu.europa.ec.eudi.pseudonym_over18_mdoc",
