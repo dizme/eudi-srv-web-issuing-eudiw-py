@@ -157,7 +157,8 @@
 			"organization_id": "Infocert",
 			"validity": 90,
 			"organization_name": "Infocert Identity issuer",
-			"doctype": "it.infocert.eudi.identity.1"
+			"doctype": "it.infocert.eudi.identity.1",
+			"credential_type": "ID Proofing"
 		}
 	}
 }

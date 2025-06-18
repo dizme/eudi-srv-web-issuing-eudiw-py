@@ -31,7 +31,7 @@ from .usecases import usecases_bp
 
 sys.path.append(os.path.dirname(__file__))
 
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect
 from flask_session import Session
 from flask_cors import CORS
 from werkzeug.debug import *
@@ -235,9 +235,10 @@ def create_app(test_config=None):
 
     @app.route("/", methods=["GET"])
     def initial_page():
-        return render_template(
-            "misc/initial_page.html", oidc=cfgserv.oidc, service_url=cfgserv.service_url
-        )
+        return redirect("/usecases/ewc")
+        # return render_template(
+        #     "misc/initial_page.html", oidc=cfgserv.oidc, service_url=cfgserv.service_url
+        # )
 
     @app.route("/favicon.ico")
     def favicon():

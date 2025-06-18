@@ -17,6 +17,7 @@ services:
       REVOCATION_API_KEY: "test"
       TOP_AUTH_CLIENT_ID: "TOP_AUTH_CLIENT_ID"
       TOP_AUTH_CLIENT_SECRET: "TOP_AUTH_CLIENT_SECRET"
+      REVOCATION_API_KEY: ""
       HMAC_SECRET: ""
     command: >
       sh -c "/root/eudi-srv-web-issuing-eudiw-py/venv/bin/flask run"
