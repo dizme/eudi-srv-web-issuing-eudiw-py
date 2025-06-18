@@ -14,9 +14,9 @@ services:
       FLASK_RUN_HOST: "0.0.0.0"
       SERVICE_URL: "SERVICE_URL (PUT / AT THE END)"
       FLASK_SECRET_KEY: "Rfyp=BxBeq"
+      REVOCATION_API_KEY: ""
       TOP_AUTH_CLIENT_ID: "TOP_AUTH_CLIENT_ID"
       TOP_AUTH_CLIENT_SECRET: "TOP_AUTH_CLIENT_SECRET"
-      REVOCATION_API_KEY: ""
       HMAC_SECRET: ""
     command: >
       sh -c "/root/eudi-srv-web-issuing-eudiw-py/venv/bin/flask run"
