@@ -182,7 +182,7 @@ def getMandatoryAttributes(claims, namespace):
             attribute_name = claim["path"][1]
 
             if "value_type" in claim:
-                attributes_form.update({attribute_name: {"type": claim["value_type"],"filled_value":None}})
+                attributes_form.update({attribute_name: {"type": claim["value_type"],"filled_value": claim["placeholder"] if "placeholder" in claim else None}})
 
             if "issuer_conditions" in claim:
                 attributes_form[attribute_name]["type"] = "list"

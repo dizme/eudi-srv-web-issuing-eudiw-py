@@ -125,7 +125,8 @@
                                             <div class="row g-3">
                                                 <div class="col-md-12">
                                                     <input type="text" class="form-control" placeholder="{{ name | replace('_', ' ') | title }}" aria-label="{{ name | replace('_', ' ') | title }}" name="{{ name }}" value="{{ attr.filled_value if attr.filled_value is not none else '' }}" 
-                                                    {% if attr.filled_value %} readonly {% endif %} required >
+{#                                                    {% if attr.filled_value and not attr.placeholder %} readonly {% endif %}#}
+                                                           required >
                                                 </div>
                                             </div>
                                         {% elif attr.type == 'list' %}
@@ -278,8 +279,13 @@
                                             <div class="row g-3">
                                                 <div class="col-md-12">
                                                     {{ name | replace('_', ' ') | title }}
-                                                    <input type="date" class="form-control" placeholder="{{ name | replace('_', ' ') | title }}" aria-label="{{ name | replace('_', ' ') | title }}" name="{{ name }}" value="{{ attr.filled_value if attr.filled_value is not none else '' }}" 
-                                                    {% if attr.filled_value %} readonly {% endif %} required >
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           aria-label="{{ name | replace('_', ' ') | title }}"
+                                                           name="{{ name }}"
+                                                           value="{{ attr.filled_value if attr.filled_value is not none else attr.placeholder or 'dd/MM/YYYY' }}"
+{#                                                           {% if attr.filled_value and not attr.placeholder %} readonly {% endif %}#}
+                                                           required>
                                                 </div>
                                             </div>
                                         {% elif attr.type == 'jpeg'%}
@@ -340,11 +346,17 @@
                 
                                                             <div class="col">
                                                                 Issue Date:
-                                                                <input type="date" class="form-control" placeholder="Issue Date" aria-label="Issue Date" name="IssueDate1" required>
+                                                                <input type="text"
+                                                                   class="form-control"
+                                                                   aria-label="Issue Date" name="IssueDate1"
+                                                                   required value="01/01/2025">
                                                             </div>
                                                             <div class="col">
                                                                 Expiry Date:
-                                                                <input type="date" class="form-control" placeholder="Expiry Date" aria-label="Expiry Date" name="ExpiryDate1" required>
+                                                                <input type="text"
+                                                                    class="form-control"
+                                                                    aria-label="Expiry Date" name="ExpiryDate1"
+                                                                    required value="01/01/2050">
                                                             </div>
                                                             
                                                             <div id="AddCategory">
