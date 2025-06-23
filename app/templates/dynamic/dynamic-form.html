@@ -279,7 +279,7 @@
                                             <div class="row g-3">
                                                 <div class="col-md-12">
                                                     {{ name | replace('_', ' ') | title }}
-                                                    <input type="text"
+                                                    <input type="date"
                                                            class="form-control"
                                                            aria-label="{{ name | replace('_', ' ') | title }}"
                                                            name="{{ name }}"
@@ -346,17 +346,17 @@
                 
                                                             <div class="col">
                                                                 Issue Date:
-                                                                <input type="text"
+                                                                <input type="date"
                                                                    class="form-control"
                                                                    aria-label="Issue Date" name="IssueDate1"
-                                                                   required value="01/01/2025">
+                                                                   required value="2025-01-01">
                                                             </div>
                                                             <div class="col">
                                                                 Expiry Date:
-                                                                <input type="text"
+                                                                <input type="date"
                                                                     class="form-control"
                                                                     aria-label="Expiry Date" name="ExpiryDate1"
-                                                                    required value="01/01/2050">
+                                                                   required value="2050-01-01">
                                                             </div>
                                                             
                                                             <div id="AddCategory">
