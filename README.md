@@ -43,7 +43,7 @@ This version of the EUDIW Issuer has partial support for the [OpenId for Verifia
 | PKCE                                                              | ✅                                                              |
 
 
-You can use the EUDIW Issuer at https://marmot-civil-gratefully.ngrok-free.app/, or install it locally.
+You can use the EUDIW Issuer at https://qeaa-issuer-4itb.infocert-labs.eu/, or install it locally.
 
 
 ## :heavy_exclamation_mark: Disclaimer
