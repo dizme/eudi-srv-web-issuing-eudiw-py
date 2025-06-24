@@ -34,7 +34,7 @@ class ConfService:
     # ------------------------------------------------------------------------------------------------
     # PID issuer service URL
     # service_url = "https://preprod.issuer.eudiw.dev:4443/"
-    service_url = os.getenv("SERVICE_URL", "http://192.168.1.8:5000/")
+    service_url = os.getenv("SERVICE_URL", "https://marmot-civil-gratefully.ngrok-free.app/")
     # service_url = "https://127.0.0.1:5000/"
     # service_url = os.getenv("SERVICE_URL","https://dev.issuer.eudiw.dev/")
     cbor_service_url = os.getenv("CBOR_SERVICE_URL", "https://127.0.0.1:8000/v1/signed-mdoc-credentials/mdl")
