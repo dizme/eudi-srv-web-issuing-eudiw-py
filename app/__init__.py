@@ -96,7 +96,9 @@ def setup_metadata():
         with open(
             dir_path + "/metadata_config/oauth-authorization-server.json"
         ) as oauth_metadata:
-            oauth_metadata = json.load(oauth_metadata)
+            template = Template(oauth_metadata.read())
+            rendered_oauth_metadata = template.render(SERVICE_URL=cfgserv.service_url[:-1])
+            oauth_metadata = json.loads(rendered_oauth_metadata)
 
         with open(dir_path + "/metadata_config/metadata_config.json") as metadata:
             template = Template(metadata.read())
