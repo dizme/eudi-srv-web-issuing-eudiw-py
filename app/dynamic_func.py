@@ -54,39 +54,44 @@ def dynamic_formatter(format, doctype, form_data, device_publickey):
         data["org.iso.18013.5.1"] = {"credential": credential_ns}
     print(data)
 
-    if format == "mso_mdoc":
-        url = cfgserv.cbor_service_url
+    if doctype == "org.iso.18013.5.1.mDL":
+        if format == "mso_mdoc":
+            url = cfgserv.cbor_service_url
 
-    elif format == "dc+sd-jwt":
-        url = cfgserv.service_url + "formatter/sd-jwt"
+        elif format == "dc+sd-jwt":
+            url = cfgserv.service_url + "formatter/sd-jwt"
+        cose_key, device_public_key_b64jwk = b64pem_to_cose_and_jwk_base64(device_publickey)
+        # Calling Cbor Service
+        r = json_data_post_with_header(
+            url=url,
+            payload=data,
+            headers = {
+                "X-Request-ID": str(uuid.uuid4()),
+                "X-Device-JWK": device_public_key_b64jwk,
+                "Content-Type": "application/json"
+            }
+        )
+        r.raise_for_status()
+        base64_mdoc = r.json().get("credential")
+        print(base64_mdoc)
+    else:
+        if format == "mso_mdoc":
+            url = cfgserv.service_url + "formatter/cbor"
 
-    # r = json_post(
-    #     url,
-    #     {
-    #         "version": session["version"],
-    #         "country": session["country"],
-    #         "credential_metadata": requested_credential,
-    #         "device_publickey": device_publickey,
-    #         "data": data,
-    #     },
-    # ).json()
+        elif format == "dc+sd-jwt":
+            url = cfgserv.service_url + "formatter/sd-jwt"
+        r = json_post(
+            url,
+            {
+                "version": session["version"],
+                "country": session["country"],
+                "credential_metadata": requested_credential,
+                "device_publickey": device_publickey,
+                "data": data,
+            },
+        ).json()
+        base64_mdoc = r["mdoc"]
 
-    cose_key, device_public_key_b64jwk = b64pem_to_cose_and_jwk_base64(device_publickey)
-
-    # Calling Cbor Service
-    r = json_data_post_with_header(
-        url=url,
-        payload=data,
-        headers = {
-            "X-Request-ID": str(uuid.uuid4()),
-            "X-Device-JWK": device_public_key_b64jwk,
-            "Content-Type": "application/json"
-        }
-    )
-
-    r.raise_for_status()
-    base64_mdoc = r.json().get("credential")
-    print(base64_mdoc)
     if format == "mso_mdoc":
         mdoc = bytes(base64_mdoc, "utf-8")
         credential = mdoc.decode("utf-8")
@@ -216,6 +221,17 @@ def formatter(data, un_distinguishing_sign, doctype, format):
     for attr in ["age_in_years", "age_birth_year"]:
         if isinstance(data.get(attr), str):
             data[attr] = int(data[attr])
+
+    # wallet attestation fields
+    wallet_attestation = doctype_config.get("wallet_attestation", {})
+    if "wallet_name" in issuer_claims:
+        data["wallet_name"] = wallet_attestation.get("wallet_name", "EU Digital Wallet")
+    if "wallet_link" in issuer_claims:
+        data["wallet_link"] = wallet_attestation.get("wallet_link", "https://ec.europa.eu/digital-wallet")
+    if "sub" in issuer_claims:
+        data["sub"] = str(uuid.uuid4())
+    if "aal" in issuer_claims:
+        data["aal"] = wallet_attestation.get("aal", "https://ec.europa.eu/digital-wallet/aal")
 
     if format == "mso_mdoc":
         for ns in namespaces:

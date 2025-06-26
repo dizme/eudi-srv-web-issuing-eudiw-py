@@ -83,7 +83,7 @@ def mdocFormatter(data, credential_metadata, country, device_publickey):
         "expiry_date": expiry_date.strftime('%Y-%m-%d')
     }
     # if data contains the namespace for mdoc italian mDL, then add verification as attribute
-    if data["org.iso.18013.5.1.IT"]:
+    if "org.iso.18013.5.1.IT" in data:
         data["org.iso.18013.5.1.IT"]["verification"] = {
             "trust_framework": "self-asserted italian mDL",
             "assurance_level": "low",

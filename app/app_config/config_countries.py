@@ -62,7 +62,8 @@ class ConfCountries:
             # "pid_mdoc_cert": "/etc/eudiw/pid-issuer/cert/hackathon-DS-0001_UT_cert.der",
             "un_distinguishing_sign": "IT",
             "supported_credentials": [
-                "it.infocert.ipzs.mdl_mdoc"
+                "it.infocert.ipzs.mdl_mdoc",
+                "it.infocert.ipzs.wallet_attestation_mdoc"
             ],
             "dynamic_R2": cfgserv.service_url + "dynamic/form_R2",
         },

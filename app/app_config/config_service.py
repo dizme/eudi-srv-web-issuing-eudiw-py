@@ -408,6 +408,7 @@ class ConfService:
             "eu.europa.ec.eudi.loyalty_mdoc",
             "eu.europa.ec.eudi.mdl_mdoc",
             "it.infocert.ipzs.mdl_mdoc",
+            "it.infocert.ipzs.wallet_attestation_mdoc",
             "eu.europa.ec.eudi.pid_vc_sd_jwt",
             "eu.europa.ec.eudi.pid_mdoc",
             "eu.europa.ec.eudi.pseudonym_over18_mdoc",

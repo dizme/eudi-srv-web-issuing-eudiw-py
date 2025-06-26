@@ -1,0 +1,42 @@
+{
+  "it.infocert.ipzs.wallet_attestation_mdoc": {
+    "format": "mso_mdoc",
+    "doctype": "org.iso.18013.5.1.it.WalletAttestation",
+    "scope": "it.infocert.ipzs.wallet_attestation_mdoc",
+    "cryptographic_binding_methods_supported": ["jwk", "cose_key"],
+    "credential_signing_alg_values_supported": ["ES256"],
+    "proof_types_supported": {
+      "jwt": {
+        "proof_signing_alg_values_supported": ["ES256"]
+      }
+    },
+    "display": [
+      {
+        "name": "Wallet Attestation",
+        "locale": "en",
+        "logo": {
+          "uri": "https://www.ipzs.it/img/internet/loghi/logoIPZS-min.svg",
+          "alt_text": "IPZS logo"
+        }
+      }
+    ],
+    "claims": [
+      { "path": ["org.iso.18013.5.1.it", "wallet_name"], "mandatory": true, "source": "issuer", "display": [{ "name": "Wallet Name", "locale": "en" }] },
+      { "path": ["org.iso.18013.5.1.it", "wallet_link"], "mandatory": true, "source": "issuer", "display": [{ "name": "Wallet Link", "locale": "en" }] },
+      { "path": ["org.iso.18013.5.1.it", "sub"], "mandatory": true, "source": "issuer", "display": [{ "name": "Subject Identifier", "locale": "en" }] },
+      { "path": ["org.iso.18013.5.1.it", "aal"], "mandatory": true, "source": "issuer", "display": [{ "name": "Verification Information", "locale": "en" }] }
+    ],
+    "issuer_config": {
+      "issuing_authority": "Test Authority",
+      "organization_id": "EUDI Wallet Reference Implementation",
+      "organization_name": "Infocert mDL issuer",
+      "namespace": "org.iso.18013.5.1.it",
+      "validity": 1,
+      "wallet_attestation": {
+          "wallet_name": "EUDI Wallet",
+          "wallet_link": "https://wallet-provider.example.org",
+          "aal": "https://wallet-provider.example.org/LoA/basic"
+      }
+    }
+  }
+}
