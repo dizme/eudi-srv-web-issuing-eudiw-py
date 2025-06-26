@@ -63,7 +63,7 @@
               document.getElementById("statusValue").textContent = status;
               document.getElementById("issuanceStatus").classList.remove("hidden");
 
-              if (["completed", "fail"].includes(status.toLowerCase())) {
+              if (["success", "fail"].includes(status.toLowerCase())) {
                   clearInterval(pollingInterval);
               }
           } catch (err) {

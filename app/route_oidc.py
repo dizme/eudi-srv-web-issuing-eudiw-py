@@ -882,7 +882,7 @@ def credential():
 
         update_transaction_status(
             session_id=session_id,
-            status="completed",
+            status="success",
             reason="Credential issued successfully",
         )
 
@@ -1036,7 +1036,7 @@ def deferred_credential():
 
     update_transaction_status(
         session_id=session_id,
-        status="completed",
+        status="success",
         reason="Credential issued successfully",
     )
 
