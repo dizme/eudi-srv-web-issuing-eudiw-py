@@ -23,31 +23,24 @@ Its main goal is to issue the PID and MDL in cbor/mdoc (ISO 18013-5 mdoc) and SD
 This formatter_func.py file contains formatter related auxiliary functions.
 """
 import base64
-import cbor2
-from cryptography.hazmat.primitives import serialization
-from pymdoccbor.mdoc.issuer import MdocCborIssuer
 import datetime
 import hashlib
+
+import cbor2
+import jwt
 import requests
+from cryptography.hazmat.primitives import serialization
+from pymdoccbor.mdoc.issuer import MdocCborIssuer
 from sd_jwt.common import SDObj
-from jsonschema import ValidationError, validate
-from sd_jwt import __version__
+from sd_jwt.issuer import SDJWTIssuer
 from sd_jwt.utils.demo_utils import (
     get_jwk,
-    load_yaml_settings,
 )
-from sd_jwt.issuer import SDJWTIssuer
-from sd_jwt.holder import SDJWTHolder
-from sd_jwt.verifier import SDJWTVerifier
-from sd_jwt.utils.yaml_specification import load_yaml_specification
-from uuid import uuid4
-import jwt
 
-
-from misc import doctype2vct, getSubClaims, urlsafe_b64encode_nopad, vct2doctype
 from app_config.config_countries import ConfCountries as cfgcountries
-from app_config.config_service import ConfService as cfgservice
 from app_config.config_secrets import revocation_api_key
+from app_config.config_service import ConfService as cfgservice
+from misc import urlsafe_b64encode_nopad, vct2doctype
 
 
 def mdocFormatter(data, credential_metadata, country, device_publickey):
@@ -82,27 +75,6 @@ def mdocFormatter(data, credential_metadata, country, device_publickey):
         "issuance_date": issuance_date.strftime('%Y-%m-%d'),
         "expiry_date": expiry_date.strftime('%Y-%m-%d')
     }
-    # if data contains the namespace for mdoc italian mDL, then add verification as attribute
-    if "org.iso.18013.5.1.IT" in data:
-        data["org.iso.18013.5.1.IT"]["verification"] = {
-            "trust_framework": "self-asserted italian mDL",
-            "assurance_level": "low",
-            "evidence": [
-                {
-                    "type": "id_evidence",
-                    "time": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds") + "Z",
-                    "attestation": {
-                        "type": "id_attestation",
-                        "reference_number": "REF123456",
-                        "date_of_issuance": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds") + "Z",
-                        "voucher": {
-                            "organization": "Motorizzazione Civile"
-                        }
-                    }
-                }
-            ]
-        }
-
 
     """ if doctype == "org.iso.18013.5.1.mDL":
 
