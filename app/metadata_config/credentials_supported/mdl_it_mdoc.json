@@ -36,10 +36,13 @@
       { "path": ["org.iso.18013.5.1", "un_distinguishing_sign"], "mandatory": true, "source": "issuer", "display": [{ "name": "UN distinguishing sign", "locale": "en" }] },
 
       { "path": ["org.iso.18013.5.1.IT", "sub"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Subject Identifier", "locale": "en" }], "placeholder":  "87cde5db-0ff1-4466-83cb-8dcca56ada9c" },
-      { "path": ["org.iso.18013.5.1.IT", "verification"], "mandatory": false, "source": "issuer", "display": [{ "name": "Verification Information", "locale": "en" }] }
+      { "path": ["org.iso.18013.5.1.IT", "verification"], "mandatory": false, "source": "issuer", "display": [{ "name": "Verification Information", "locale": "en" }] },
+      { "path": ["org.iso.18013.5.1.IT", "document_iss_authority"], "mandatory": true, "source": "issuer", "display": [{ "name": "Document Issuer Authority", "locale": "en" }]},
+      { "path": ["org.iso.18013.5.1.IT", "document_iss_country"], "mandatory": true, "source": "issuer", "display": [{ "name": "Document Issuer Country", "locale": "en" }]}
     ],
     "issuer_config": {
       "issuing_authority": "Test Authority",
+      "issuing_country": "IT",
       "organization_id": "EUDI Wallet Reference Implementation",
       "organization_name": "Infocert mDL issuer",
       "namespace": "org.iso.18013.5.1",

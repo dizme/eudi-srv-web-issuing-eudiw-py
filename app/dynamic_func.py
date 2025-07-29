@@ -179,6 +179,9 @@ def formatter(data, un_distinguishing_sign, doctype, format):
     if "issuing_authority" in issuer_claims:
         data["issuing_authority"] = doctype_config["issuing_authority"]
 
+    if "issuing_country" in issuer_claims:
+        data["issuing_country"] = doctype_config["issuing_country"]
+
     if "issuing_authority_unicode" in issuer_claims:
         data["issuing_authority_unicode"] = doctype_config["issuing_authority"]
 
@@ -206,6 +209,13 @@ def formatter(data, un_distinguishing_sign, doctype, format):
                 }
             }]
         }
+
+    if "document_iss_authority" in issuer_claims:
+        data["document_iss_authority"] = doctype_config["issuing_authority"]
+
+    if "document_iss_country" in issuer_claims:
+        data["document_iss_country"] = doctype_config["issuing_country"]
+
 
     for k in ["at_least_one_of"]:
         attributes_req.pop(k, None)
