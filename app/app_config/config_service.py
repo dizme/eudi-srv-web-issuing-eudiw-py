@@ -41,6 +41,8 @@ class ConfService:
 
     wallet_test_url = "https://tester.issuer.eudiw.dev/"
 
+    test_web_credentials = os.getenv("TEST_CREDENTIALS", "test:test")
+
     revocation_service_url = os.getenv("SERVICE_URL", "https://marmot-civil-gratefully.ngrok-free.app/")+ "token_status_list/take"
 
     # ---------------------------------------------------------------------------

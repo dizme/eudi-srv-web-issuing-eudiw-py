@@ -1030,6 +1030,10 @@ def credential_offer():
 
     Loads credentials supported by EUDIW Issuer
     """
+    # Check authentication
+    if not session.get("authenticated"):
+        return redirect(url_for("oidc.login"))
+
     credentialsSupported = oidc_metadata["credential_configurations_supported"]
 
     credentials = {"sd-jwt vc format": {}, "mdoc format": {}}
@@ -1407,3 +1411,18 @@ def service_endpoint(endpoint):
 @oidc.errorhandler(werkzeug.exceptions.BadRequest)
 def handle_bad_request(e):
     return "bad request!", 400
+
+# Login route for authentication
+@oidc.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        form_username = request.form.get("username")
+        form_password = request.form.get("password")
+        test_user, test_pass = cfgservice.test_web_credentials.split(":")
+        if form_username == test_user and form_password == test_pass:
+            session["authenticated"] = True
+            return redirect(url_for("oidc.credential_offer"))
+        else:
+            return render_template("misc/login.html", error="Invalid credentials")
+    return render_template("misc/login.html", error=None)
+
