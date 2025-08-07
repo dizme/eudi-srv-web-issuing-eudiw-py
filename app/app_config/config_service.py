@@ -46,7 +46,7 @@ class ConfService:
     revocation_service_url = os.getenv("SERVICE_URL", "https://marmot-civil-gratefully.ngrok-free.app/")+ "token_status_list/take"
 
     # ---------------------------------------------------------------------------
-    trusted_CAs_path = "/etc/eudiw/pid-issuer/cert/"
+    trusted_CAs_path = "/etc/eudiw/eaa-issuer/cert/"
 
     # ------------------------------------------------------------------------------------------------
     # eIDAS Node base href (used in lightrequest)

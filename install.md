@@ -143,7 +143,7 @@ To run the EUDIW Issuer, please follow these simple steps (some of which may hav
   
 3. Run the EUDIW Issuer with certificate and key
     ```
-    flask --app app run --cert=cert.pem --key=key.pem
+    flask --app app run --cert=cert.pem --key=key.pem --host=0.0.0.0
     ```
     
 ## 5. Make your local EUDIW Issuer available on the Internet (optional)
@@ -201,20 +201,24 @@ To run the EUDIW issuer in Docker please follow these steps:
 
 1. Install Docker following the official instructions for your operating system : <https://docs.docker.com/engine/install/>
 
-2. Download the Dockerfile at <https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py/blob/main/Dockerfile> 
+2. You have the Dockerfile at the root of the repository, so you can build the Docker image with the following command:
+
+   ```bash
+   sudo sudo docker build -t eudiw-issuer .
+   ```
 
 3. Build the Docker: `sudo docker build -t eudiw-issuer .`
 
 4. Create 2 directories to be mounted:
 
-   1. First directory named `config_secrets`
+   1. First directory named `secrets`
       
       This directory will have the cert.pem and key.pem generated in [Section 4](#4-running-your-local-eudiw-issuer-over-https)
    
       As well as the config_secrets.py based on this [example](app/app_config/__config_secrets.py)
 
 
-   2. Second directory named `pid-issuer`, inside will be a directory `cert` and `privKey`
+   2. Second directory named `eaa-issuer`, inside will be a directory `cert` and `privKey`
       
       The `cert` directory has the certificates of the trusted CAs in PEM format as well as the Document/Credential signer (DS) certificates in DER format
 
@@ -227,11 +231,11 @@ To run the EUDIW issuer in Docker please follow these steps:
     ```bash
     docker-issuer
     ├── Dockerfile
-    ├── config_secrets
+    ├── secrets
     │   ├── config_secrets.py
     │   ├── cert.pem
     │   └── key.pem
-    └── pid-issuer
+    └── eaa-issuer
         ├── cert
         │   ├── PID-DS-0001_UT_cert.der
         │   └── PIDIssuerCAUT01.pem
@@ -249,8 +253,8 @@ To run the EUDIW issuer in Docker please follow these steps:
     -e SERVICE_URL="https://your.service.url/" \
     -e EIDAS_NODE_URL="https://your.eidas.node.url/" \
     -e DYNAMIC_PRESENTATION_URL="https://your.dynamic.presentation.url/" \
-    -v ./config_secrets:/root/secrets \
-    -v ./pid-issuer:/etc/eudiw/pid-issuer \
+    -v ./secrets:/root/secrets \
+    -v ./eaa-issuer:/etc/eudiw/eaa-issuer \
     -p 5000:5000 \
     eudiw-issuer
     ```

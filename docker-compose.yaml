@@ -16,10 +16,8 @@ services:
     environment:
       LOG_LEVEL: "DEBUG"
       SIGN_API_URL: "https://iot-mtls.infocert.digital"
-        #SIGN_API_URL: "https://dane-equipped-viper.ngrok-free.app"
       SIGN_MTLS_CERTIFICATE: "/etc/certs/pki/cbor_service.crt"
       SIGN_MTLS_KEY: "/etc/certs/pki/cbor_service.key"
-      #SIGN_CA_CERTIFICATE: "/etc/certs/pki/ca.crt"
       SIGN_API_PATH: "/iot/rest/v1/cipher/InfoCert/IPZS/sign"
       COSE_ALGORITHM: ES256
     volumes:
