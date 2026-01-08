@@ -64,12 +64,12 @@ def revocation_choice():
             # if credential["scope"] == "eu.europa.ec.eudiw.pid.1":
             credentials["sd-jwt vc format"].update(
                 # {"Personal Identification Data": cred}
-                {cred: credential["display"][0]["name"]}
+                {cred: credential["credential_metadata"]["display"][0]["name"]}
             )
 
         if credential["format"] == "mso_mdoc":
             credentials["mdoc format"].update(
-                {cred: credential["display"][0]["name"]}
+                {cred: credential["credential_metadata"]["display"][0]["name"]}
             )
 
     return render_template(
@@ -110,7 +110,7 @@ def oid4vp_call():
             }
 
 
-            for claim in credential["claims"]:
+            for claim in credential["credential_metadata"]["claims"]:
                 if claim["mandatory"] == True:
                     fields.append(
                         {
@@ -166,7 +166,7 @@ def oid4vp_call():
                 },
             )
 
-            for claim in credential["claims"]:
+            for claim in credential["credential_metadata"]["claims"]:
                     if claim["mandatory"] == True:
                         fields.append(
                             {

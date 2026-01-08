@@ -109,7 +109,7 @@ def formatter(data, un_distinguishing_sign, doctype, format):
         requested_credential = doctype2credential(doctype, format)
         doctype_config = requested_credential["issuer_config"]
         expiry = today + datetime.timedelta(days=doctype_config["validity"])
-        namespaces = getNamespaces(requested_credential["claims"])
+        namespaces = getNamespaces(requested_credential["credential_metadata"]["claims"])
 
         combined_attributes = {}
         combined_opt_attributes = {}
@@ -117,9 +117,9 @@ def formatter(data, un_distinguishing_sign, doctype, format):
         pdata = {}
 
         for ns in namespaces:
-            combined_attributes.update(getMandatoryAttributes(requested_credential["claims"], ns))
-            combined_opt_attributes.update(getOptionalAttributes(requested_credential["claims"], ns))
-            combined_issuer_attributes.update(getIssuerFilledAttributes(requested_credential["claims"], ns))
+            combined_attributes.update(getMandatoryAttributes(requested_credential["credential_metadata"]["claims"], ns))
+            combined_opt_attributes.update(getOptionalAttributes(requested_credential["credential_metadata"]["claims"], ns))
+            combined_issuer_attributes.update(getIssuerFilledAttributes(requested_credential["credential_metadata"]["claims"], ns))
             pdata[ns] = {}  # Init namespace-specific section
 
         attributes_req = combined_attributes
@@ -143,9 +143,9 @@ def formatter(data, un_distinguishing_sign, doctype, format):
             "claims": {}
         }
 
-        attributes_req = getMandatoryAttributesSDJWT(requested_credential["claims"])
-        attributes_req2 = getOptionalAttributesSDJWT(requested_credential["claims"])
-        issuer_claims = getIssuerFilledAttributesSDJWT(requested_credential["claims"])
+        attributes_req = getMandatoryAttributesSDJWT(requested_credential["credential_metadata"]["claims"])
+        attributes_req2 = getOptionalAttributesSDJWT(requested_credential["credential_metadata"]["claims"])
+        issuer_claims = getIssuerFilledAttributesSDJWT(requested_credential["credential_metadata"]["claims"])
 
     else:
         raise ValueError("Unsupported format: {}".format(format))
@@ -245,12 +245,12 @@ def formatter(data, un_distinguishing_sign, doctype, format):
 
     if format == "mso_mdoc":
         for ns in namespaces:
-            for attribute in getMandatoryAttributes(requested_credential["claims"], ns):
+            for attribute in getMandatoryAttributes(requested_credential["credential_metadata"]["claims"], ns):
                 pdata[ns][attribute] = data[attribute]
-            for attribute in getOptionalAttributes(requested_credential["claims"], ns):
+            for attribute in getOptionalAttributes(requested_credential["credential_metadata"]["claims"], ns):
                 if attribute in data:
                     pdata[ns][attribute] = data[attribute]
-            for attribute in getIssuerFilledAttributes(requested_credential["claims"], ns):
+            for attribute in getIssuerFilledAttributes(requested_credential["credential_metadata"]["claims"], ns):
                 if attribute in data:
                     pdata[ns][attribute] = data[attribute]
 

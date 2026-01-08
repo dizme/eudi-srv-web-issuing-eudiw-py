@@ -3,6 +3,10 @@
     "format": "mso_mdoc",
     "doctype": "org.iso.18013.5.1.mDL",
     "scope": "it.infocert.ipzs.mdl_mdoc",
+    "policy": {
+      "batch_size": 15,
+      "one_time_use": true
+    },
     "cryptographic_binding_methods_supported": ["jwk", "cose_key"],
     "credential_signing_alg_values_supported": ["ES256"],
     "proof_types_supported": {
@@ -10,36 +14,38 @@
         "proof_signing_alg_values_supported": ["ES256"]
       }
     },
-    "display": [
-      {
-        "name": "Patente di Guida Europea",
-        "locale": "en",
-        "logo": {
-          "uri": "https://www.ipzs.it/img/internet/loghi/logoIPZS-min.svg",
-          "alt_text": "IPZS logo"
+    "credential_metadata": {
+      "display": [
+        {
+          "name": "Patente di Guida Europea",
+          "locale": "en",
+          "logo": {
+            "uri": "https://www.ipzs.it/img/internet/loghi/logoIPZS-min.svg",
+            "alt_text": "IPZS logo"
+          }
         }
-      }
-    ],
-    "claims": [
-      { "path": ["org.iso.18013.5.1", "family_name"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Family name", "locale": "en" }], "placeholder": "Rossi" },
-      { "path": ["org.iso.18013.5.1", "given_name"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Given name", "locale": "en" }], "placeholder":  "Mario" },
-      { "path": ["org.iso.18013.5.1", "birth_date"], "mandatory": true, "value_type": "full-date", "source": "user", "display": [{ "name": "Date of birth", "locale": "en" }], "placeholder":  "2000-01-01" },
-      { "path": ["org.iso.18013.5.1", "birth_place"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Place of birth", "locale": "en" }], "placeholder":  "Roma" },
-      { "path": ["org.iso.18013.5.1", "issue_date"], "mandatory": true, "source": "issuer", "display": [{ "name": "Date of issue", "locale": "en" }] },
-      { "path": ["org.iso.18013.5.1", "expiry_date"], "mandatory": true, "source": "issuer", "display": [{ "name": "Date of expiry", "locale": "en" }] },
-      { "path": ["org.iso.18013.5.1", "issuing_country"], "mandatory": true, "source": "issuer", "display": [{ "name": "Issuing country", "locale": "en" }] },
-      { "path": ["org.iso.18013.5.1", "issuing_authority"], "mandatory": true, "source": "issuer", "display": [{ "name": "Issuing authority", "locale": "en" }] },
-      { "path": ["org.iso.18013.5.1", "expiry_date"], "mandatory": true, "source": "issuer", "display": [{ "name": "Date of expiry", "locale": "en" }] },
-      { "path": ["org.iso.18013.5.1", "document_number"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "License number", "locale": "en" }], "placeholder":  "ASD456JP" },
-      { "path": ["org.iso.18013.5.1", "portrait"], "mandatory": true, "value_type": "jpeg", "source": "user", "display": [{ "name": "Portrait", "locale": "en" }], "placeholder":  "" },
-      { "path": ["org.iso.18013.5.1", "driving_privileges"], "mandatory": true, "value_type": "driving_privileges", "source": "user", "display": [{ "name": "Driving privileges", "locale": "en" }], "placeholder":  "" },
-      { "path": ["org.iso.18013.5.1", "un_distinguishing_sign"], "mandatory": true, "source": "issuer", "display": [{ "name": "UN distinguishing sign", "locale": "en" }] },
+      ],
+      "claims": [
+        { "path": ["org.iso.18013.5.1", "family_name"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Family name", "locale": "en" }], "placeholder": "Rossi" },
+        { "path": ["org.iso.18013.5.1", "given_name"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Given name", "locale": "en" }], "placeholder":  "Mario" },
+        { "path": ["org.iso.18013.5.1", "birth_date"], "mandatory": true, "value_type": "full-date", "source": "user", "display": [{ "name": "Date of birth", "locale": "en" }], "placeholder":  "2000-01-01" },
+        { "path": ["org.iso.18013.5.1", "birth_place"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Place of birth", "locale": "en" }], "placeholder":  "Roma" },
+        { "path": ["org.iso.18013.5.1", "issue_date"], "mandatory": true, "source": "issuer", "display": [{ "name": "Date of issue", "locale": "en" }] },
+        { "path": ["org.iso.18013.5.1", "expiry_date"], "mandatory": true, "source": "issuer", "display": [{ "name": "Date of expiry", "locale": "en" }] },
+        { "path": ["org.iso.18013.5.1", "issuing_country"], "mandatory": true, "source": "issuer", "display": [{ "name": "Issuing country", "locale": "en" }] },
+        { "path": ["org.iso.18013.5.1", "issuing_authority"], "mandatory": true, "source": "issuer", "display": [{ "name": "Issuing authority", "locale": "en" }] },
+        { "path": ["org.iso.18013.5.1", "expiry_date"], "mandatory": true, "source": "issuer", "display": [{ "name": "Date of expiry", "locale": "en" }] },
+        { "path": ["org.iso.18013.5.1", "document_number"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "License number", "locale": "en" }], "placeholder":  "ASD456JP" },
+        { "path": ["org.iso.18013.5.1", "portrait"], "mandatory": true, "value_type": "jpeg", "source": "user", "display": [{ "name": "Portrait", "locale": "en" }], "placeholder":  "" },
+        { "path": ["org.iso.18013.5.1", "driving_privileges"], "mandatory": true, "value_type": "driving_privileges", "source": "user", "display": [{ "name": "Driving privileges", "locale": "en" }], "placeholder":  "" },
+        { "path": ["org.iso.18013.5.1", "un_distinguishing_sign"], "mandatory": true, "source": "issuer", "display": [{ "name": "UN distinguishing sign", "locale": "en" }] },
 
-      { "path": ["org.iso.18013.5.1.IT", "sub"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Subject Identifier", "locale": "en" }], "placeholder":  "87cde5db-0ff1-4466-83cb-8dcca56ada9c" },
-      { "path": ["org.iso.18013.5.1.IT", "verification"], "mandatory": false, "source": "issuer", "display": [{ "name": "Verification Information", "locale": "en" }] },
-      { "path": ["org.iso.18013.5.1.IT", "document_iss_authority"], "mandatory": true, "source": "issuer", "display": [{ "name": "Document Issuer Authority", "locale": "en" }]},
-      { "path": ["org.iso.18013.5.1.IT", "document_iss_country"], "mandatory": true, "source": "issuer", "display": [{ "name": "Document Issuer Country", "locale": "en" }]}
-    ],
+        { "path": ["org.iso.18013.5.1.IT", "sub"], "mandatory": true, "value_type": "string", "source": "user", "display": [{ "name": "Subject Identifier", "locale": "en" }], "placeholder":  "87cde5db-0ff1-4466-83cb-8dcca56ada9c" },
+        { "path": ["org.iso.18013.5.1.IT", "verification"], "mandatory": false, "source": "issuer", "display": [{ "name": "Verification Information", "locale": "en" }] },
+        { "path": ["org.iso.18013.5.1.IT", "document_iss_authority"], "mandatory": true, "source": "issuer", "display": [{ "name": "Document Issuer Authority", "locale": "en" }]},
+        { "path": ["org.iso.18013.5.1.IT", "document_iss_country"], "mandatory": true, "source": "issuer", "display": [{ "name": "Document Issuer Country", "locale": "en" }]}
+      ]
+    },
     "issuer_config": {
       "issuing_authority": "Test Authority",
       "issuing_country": "IT",

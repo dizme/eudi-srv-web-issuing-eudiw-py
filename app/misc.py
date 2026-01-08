@@ -138,11 +138,11 @@ def getAttributesForm(credentials_requested):
 
         attributes_req = {}
         if format == "mso_mdoc":
-            namescapes = getNamespaces(credentialsSupported[request]["claims"])
+            namescapes = getNamespaces(credentialsSupported[request]["credential_metadata"]["claims"])
             combined_attributes = {}
             for namescape in namescapes:
                 attributes_from_namescape = getMandatoryAttributes(
-                    credentialsSupported[request]["claims"],
+                    credentialsSupported[request]["credential_metadata"]["claims"],
                     namescape
                 )
                 combined_attributes.update(attributes_from_namescape)
@@ -150,7 +150,7 @@ def getAttributesForm(credentials_requested):
 
         elif format == "dc+sd-jwt":
             attributes_req.update(
-                getMandatoryAttributesSDJWT(credentialsSupported[request]["claims"])
+                getMandatoryAttributesSDJWT(credentialsSupported[request]["credential_metadata"]["claims"])
             )
 
         for attribute in attributes_req:
@@ -442,11 +442,11 @@ def getAttributesForm2(credentials_requested):
         attributes_req = {}
 
         if format == "mso_mdoc":
-            namescapes = getNamespaces(credentialsSupported[request]["claims"])
+            namescapes = getNamespaces(credentialsSupported[request]["credential_metadata"]["claims"])
             combined_attributes = {}
             for namescape in namescapes:
                 attributes_from_namescape = getOptionalAttributes(
-                    credentialsSupported[request]["claims"],
+                    credentialsSupported[request]["credential_metadata"]["claims"],
                     namescape
                 )
                 combined_attributes.update(attributes_from_namescape)
@@ -455,7 +455,7 @@ def getAttributesForm2(credentials_requested):
 
         elif format == "dc+sd-jwt":
             attributes_req.update(
-                getOptionalAttributesSDJWT(credentialsSupported[request]["claims"])
+                getOptionalAttributesSDJWT(credentialsSupported[request]["credential_metadata"]["claims"])
             )
 
         for attribute in attributes_req:
@@ -583,7 +583,7 @@ def getSubClaims(claimLv1, vct):
         if "vct" not in credential or credential["vct"] != vct:
             continue
         else:
-            for claim in credential["claims"]:
+            for claim in credential["credential_metadata"]["claims"]:
                 if claim["path"][0] != claimLv1:
                     continue
                 else:
