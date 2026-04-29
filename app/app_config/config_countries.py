@@ -56,9 +56,9 @@ class ConfCountries:
         formCountry: {
             "name": "IT-Test",
             "pid_url": cfgserv.service_url + "pid/form",
-            "pid_mdoc_privkey": "api_docs/test_tokens/DS-token/PID-DS-0002/PID-DS-0002.pid-ds-0002.key.pem",
-            "pid_mdoc_privkey_passwd": b'pid-ds-0002',  # None or bytes
-            "pid_mdoc_cert": "api_docs/test_tokens/DS-token/PID-DS-0002/PID-DS-0002.cert.der",
+            "pid_mdoc_privkey": "api_docs/test_tokens/2026-01-29/2026-01-29.key.pem",
+            "pid_mdoc_privkey_passwd": None,  # None or bytes
+            "pid_mdoc_cert": "api_docs/test_tokens/2026-01-29/2026-01-29.cert.der",
             # "pid_mdoc_cert": "/etc/eudiw/pid-issuer/cert/hackathon-DS-0001_UT_cert.der",
             "un_distinguishing_sign": "IT",
             "supported_credentials": [

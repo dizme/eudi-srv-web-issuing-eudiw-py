@@ -1,6 +1,6 @@
 services:
   sampleissuer:
-    image: 442426876549.dkr.ecr.eu-west-1.amazonaws.com/etuitus/mdl-issuer:0.2.6-DEMO-IPZS
+    image: 442426876549.dkr.ecr.eu-west-1.amazonaws.com/etuitus/mdl-issuer:0.2.7-DEMO-IPZS
     container_name: sampleissuer
     environment:
       CBOR_SERVICE_URL: "http://cborservice:8080/v1/signed-mdoc-credentials/mdl"

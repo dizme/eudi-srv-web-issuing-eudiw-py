@@ -1,0 +1,18 @@
+[ req ]
+default_bits       = 4096
+distinguished_name = dn
+x509_extensions    = v3_sign
+prompt             = no
+
+[ dn ]
+C  = IT
+O  = eTuitus SRL
+OU = eTuitus Crypto Kit
+CN = eTuitus Crypto Kit Code Signing
+
+[ v3_sign ]
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, digitalSignature
+extendedKeyUsage = critical, 1.3.130.2.0.0.1.2
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always

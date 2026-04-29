@@ -72,8 +72,8 @@ def mdocFormatter(data, credential_metadata, country, device_publickey):
     expiry_date = issuance_date + datetime.timedelta(days=credential_metadata["issuer_config"]["validity"])
 
     validity = {
-        "issuance_date": issuance_date.strftime('%Y-%m-%d'),
-        "expiry_date": expiry_date.strftime('%Y-%m-%d')
+        "issuance_date": issuance_date,
+        "expiry_date": expiry_date
     }
 
     """ if doctype == "org.iso.18013.5.1.mDL":
@@ -132,7 +132,7 @@ def mdocFormatter(data, credential_metadata, country, device_publickey):
 
     revocation_json = None
     if revocation_api_key:
-        payload = "doctype=" + credential_metadata["doctype"] + "&country=" + country + "&expiry_date=" + validity["expiry_date"]
+        payload = "doctype=" + credential_metadata["doctype"] + "&country=" + country + "&expiry_date=" + validity["expiry_date"].strftime('%Y-%m-%d')
         headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'X-Api-Key': revocation_api_key
